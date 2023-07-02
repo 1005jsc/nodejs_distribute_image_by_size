@@ -5,6 +5,7 @@
 import path from 'path';
 import fs from 'fs';
 import { getFilesizeInBytes, makeFolderByFileSize } from './logic.js';
+import { folderPathByFileSize } from './pathDeclaration.js';
 
 // 1. cli로부터 경로 가져오기
 console.log(process.argv);
@@ -21,8 +22,6 @@ const resultLocation = process.argv[3];
 fs.promises.readdir(fileLocation).then(processFiles);
 
 function processFiles(files) {
-  console.log(files);
-
   files.forEach((file) => {
     handleFile(file);
   });
@@ -33,12 +32,12 @@ function handleFile(fileName) {
   const fileSize = getFilesizeInBytes(fileLocation, fileName);
   // 파일 사이즈에 폴더있나 없나 확인 있으면 만들고 없으면 넘김
 
-  if (fs.existsSync(path.join(resultLocation, `${fileSize}`))) {
+  if (fs.existsSync(folderPathByFileSize(resultLocation, fileSize))) {
     // 있으면 넘어감
-    console.log('있음', path.join(fileLocation, fileName));
+    console.log('있음', path.join(resultLocation, fileName));
   } else {
     // 없으면 만듬
-    console.log('없음');
+    console.log('없음', folderPathByFileSize(resultLocation, fileSize));
     makeFolderByFileSize(resultLocation, fileSize);
   }
 

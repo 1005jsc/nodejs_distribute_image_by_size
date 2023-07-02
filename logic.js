@@ -2,8 +2,8 @@ import fs from 'fs';
 import path from 'path';
 
 // 파일의 용량 알아오기 MB, 올림처리
-export function getFilesizeInBytes(filePath) {
-  const stats = fs.statSync(filePath);
+export function getFilesizeInBytes(filePath, fileName) {
+  const stats = fs.statSync(path.join(filePath, fileName));
   const fileSizeInBytes = stats.size;
 
   return Math.ceil(fileSizeInBytes / (1024 * 1024));
